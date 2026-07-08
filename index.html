@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📝 Study App for Kids!</title>
+  <!-- Google Fonts - Hacking LEC. theme -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:      #101f3d;
+      --navy-deep: #0a1730;
+      --gold:      #c9a227;
+      --gold-light:#e6c757;
+      --maroon:    #7a1f2b;
+      --steel:     #54607a;
+      --parchment: #f8f4ea;
+      --white:     #fffef9;
+      --ink:       #1c1c1c;
+      --primary:   var(--gold-light);
+      --secondary: #cbd5e6;
+      --card:      var(--parchment);
+      --accent:    var(--maroon);
+      --highlight: var(--gold);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ==================== ACCESS GATE: .hidden utility (inserted) ==================== */
+    .hidden { display: none !important; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--parchment);
+      border-radius: 25px;
+      box-shadow: 0 12px 0 var(--gold), 0 16px 40px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+      padding: 40px 30px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 5px solid var(--gold);
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(230,199,87,0.15) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .emoji-banner {
+      font-size: 3.5em;
+      margin-bottom: 15px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+      font-weight: 800;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .header .emoji {
+      font-size: 3em;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    /* Login Section Styles */
+    #accessSection {
+      text-align: center;
+    }
+
+    #fileDisplay {
+      font-size: 1.8em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: var(--navy);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    #accessSection h2 {
+      font-size: 1em;
+      color: var(--steel);
+      margin-bottom: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .password-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    #codeInput {
+      font-size: 18px;
+      padding: 15px 50px 15px 20px;
+      width: 300px;
+      border-radius: 15px;
+      border: 3px solid var(--navy);
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s;
+    }
+
+    #codeInput:focus {
+      outline: none;
+      border-color: var(--maroon);
+      box-shadow: 0 0 15px rgba(122, 31, 43, 0.3);
+    }
+
+    #toggleEye {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 24px;
+      user-select: none;
+      transition: transform 0.3s ease;
+    }
+
+    #toggleEye:hover {
+      transform: translateY(-50%) scale(1.2);
+    }
+
+    .btn {
+      padding: 15px 40px;
+      font-size: 20px;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #93283a 0%, #6e1c29 100%);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--navy-deep);
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #f1e9d2 0%, var(--gold-light) 100%);
+      color: var(--ink);
+    }
+
+    #contactLink {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--navy);
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    #contactLink:hover {
+      color: var(--maroon);
+      transform: scale(1.05);
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--maroon);
+    }
+
+    #tipsArea {
+      margin-top: 25px;
+      padding: 20px;
+      background: linear-gradient(135deg, #f1e9d2 0%, var(--gold-light) 100%);
+      border-radius: 15px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink);
+      text-align: left;
+    }
+
+    /* Main Content Styles */
+    #mainContent h1 {
+      font-size: 1.8em;
+      color: var(--navy);
+      margin-bottom: 20px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+#mainContent h2 {
+      font-size: 2em;
+      color: var(--navy);
+      margin-bottom: 20px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    /* Reviewer Section */
+    .reviewer details {
+      background: linear-gradient(135deg, #eef1f6 0%, #f6efdd 100%);
+      margin-bottom: 15px;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 4px solid transparent;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .reviewer details::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .reviewer details:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      border-color: var(--gold);
+    }
+
+    .reviewer details:hover::before {
+      opacity: 1;
+    }
+
+    .reviewer summary {
+      padding: 20px;
+      font-size: 1.3em;
+      font-weight: bold;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.5);
+      transition: all 0.3s;
+      color: var(--ink);
+      position: relative;
+      z-index: 1;
+    }
+
+    .reviewer summary:hover {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .reviewer ul {
+      padding: 20px 40px;
+      list-style-type: none;
+    }
+
+    .reviewer li {
+      padding: 10px 0;
+      font-size: 1.1em;
+      line-height: 1.6;
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .reviewer li::before {
+      content: "🌟";
+      position: absolute;
+      left: 0;
+      font-size: 1.2em;
+    }
+
+    .reviewer strong {
+      color: var(--navy);
+    }
+
+    /* Quiz Section */
+    .question {
+      background: linear-gradient(135deg, #f1e9d2 0%, var(--gold-light) 100%);
+      padding: 25px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      border: 3px solid var(--maroon);
+    }
+
+    .question p {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: var(--ink);
+    }
+
+    .question label {
+      display: block;
+      padding: 12px;
+      margin: 8px 0;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1.1em;
+    }
+
+    .question label:hover {
+      background: #f1e9d2;
+      transform: translateX(5px);
+    }
+
+    input[type="radio"] {
+      transform: scale(1.5);
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .correct {
+      color: #38a169;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    .wrong {
+      color: #e53e3e;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    .correct::before {
+      content: "✨ ";
+    }
+
+    .wrong::before {
+      content: "💡 ";
+    }
+
+    #result {
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    #result h2 {
+      font-size: 2.5em;
+      color: var(--navy-deep);
+      text-shadow: none;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .nav-buttons {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #finishBtn {
+      font-size: 2em;
+      padding: 20px 50px;
+      background: linear-gradient(135deg, #93283a 0%, #6e1c29 100%);
+    }
+
+    /* Contact Modal */
+    #contactModalBG {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    #contactModal {
+      background: var(--parchment);
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh;
+      margin: 40px auto;
+      padding: 35px;
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+    }
+
+    #contactModal h2 {
+      margin-top: 0;
+      font-size: 1.8em;
+      text-align: center;
+      color: var(--navy);
+      margin-bottom: 25px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    #contactModal label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: var(--steel);
+      font-size: 1.1em;
+    }
+
+    #contactModal input,
+    #contactModal textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s;
+    }
+
+    #contactModal input:focus,
+    #contactModal textarea:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 10px rgba(16, 31, 61, 0.3);
+    }
+
+    #contactModal textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Icon Dancing Animations */
+    .icon {
+      font-size: 1.4em;
+      display: inline-block;
+      animation: dance 1.5s infinite ease-in-out;
+      transform-origin: center bottom;
+    }
+
+    /* Create variations for different icons */
+    .icon:nth-child(2n) {
+      animation: wiggle 2s infinite ease-in-out;
+    }
+
+    .icon:nth-child(3n) {
+      animation: spin 3s infinite linear;
+    }
+
+    .icon:nth-child(4n) {
+      animation: bounce-icon 1.8s infinite ease-in-out;
+    }
+
+    .icon:nth-child(5n) {
+      animation: swing 2.5s infinite ease-in-out;
+    }
+
+    @keyframes dance {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      25% {
+        transform: translateY(-10px) rotate(-5deg);
+      }
+      50% {
+        transform: translateY(-5px) rotate(5deg);
+      }
+      75% {
+        transform: translateY(-10px) rotate(-3deg);
+      }
+    }
+
+    @keyframes wiggle {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(-15deg);
+      }
+      75% {
+        transform: rotate(15deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes bounce-icon {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-15px) scale(1.1);
+      }
+    }
+
+    @keyframes swing {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      20% {
+        transform: rotate(15deg);
+      }
+      40% {
+        transform: rotate(-10deg);
+      }
+      60% {
+        transform: rotate(5deg);
+      }
+      80% {
+        transform: rotate(-5deg);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8em;
+      }
+
+      #codeInput {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .nav-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    /* Loading animation */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .accordion {
+  background:var(--primary);
+  color:var(--navy-deep);
+  padding:12px;
+  cursor:pointer;
+  border:none;
+  width:100%;
+  box-sizing:border-box;
+  text-align:left;
+  margin-top:8px;
+  border-radius:8px;
+  font-weight:bold;
+  font-size:1rem;
+  transition:0.2s;
+  display:block;
+  font-family: 'Inter', sans-serif;
+}
+.accordion:hover{opacity:0.9}
+
+.sub{background:var(--secondary)}
+.topic{background:#e9e2cf;color:var(--ink)}
+
+    .panel{
+  display:none;
+  background:var(--card);
+  padding:12px;
+  border-radius:8px;
+  margin-bottom:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.qa{
+  background:#f5f1e6;
+  padding:12px;
+  margin:8px 0;
+  border-left:5px solid var(--accent);
+  border-radius:6px;
+}
+.key{
+  background:#fff8e1;
+  padding:12px;
+  border-left:5px solid var(--highlight);
+  margin-top:10px;
+  border-radius:6px;
+  font-weight:bold;
+}
+.quiz{
+  background:#eef1f6;
+  padding:10px;
+  border-left:5px solid var(--accent);
+  margin-top:8px;
+  border-radius:6px;
+}
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-content">
+        <div class="emoji-banner">🌍 🔬 ⚗️</div>
+        <h1>Bible Adventure!</h1>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- LOGIN PAGE DEACTIVATED (keep for future use)
+      <div id="accessSection">
+        <p id="fileDisplay"></p>
+        <h2>🔐 Enter Access Code: '123'</h2>
+        
+        <div class="password-container">
+          <input type="password" id="codeInput" placeholder="Type your code here...">
+          <span id="toggleEye">👁️</span>
+        </div>
+        
+        <br>
+        <button type="button" id="accessSubmit" class="btn btn-primary">Login</button>
+
+        <div>
+          <span id="contactLink">📧 Need Help? Contact Us!</span>
+        </div>
+
+        <p id="message" aria-live="polite"></p>
+        <div id="tipsArea">Loading tips...</div>
+      </div>
+      END LOGIN PAGE -->
+
+      <!-- ==================== START: GATED CONTENT WRAPPER (inserted) ====================
+           This div was originally <div id="mainContent" style="display:block;">.
+           Renamed to id="reviewerContent" + class="hidden" so the access-gate script
+           (added near </body>) can reveal it only after an approved token check. -->
+      <div id="reviewerContent" class="hidden">
+
+      
+      <div id="mainContent">
+        <div id="reviewerSection">
+          <h1>🌟 Old Testament 🌟</h1>
+     
+          <section class="reviewer">
+          
+          
+            <!-- ==================== START OF REVIEWER ==================== -->
+            
+<div class="container">
+
+
+<!-- OLD TESTAMENT -->
+<!-- <button class="accordion">📖 OLD TESTAMENT</button><div class="panel">
+-->
+
+<!-- GENESIS -->
+<button class="accordion sub">🌍 Genesis & Early History</button>
+<div class="panel">
+
+<button class="accordion topic">✨ Creation & Fall</button>
+<div class="panel">
+<ul>
+<li>🌟 <b>God</b> created everything in 6 days – shows His power as Creator</li>
+<li>👤 Humans created on <b>Day 6</b> – special creation in God’s image</li>
+<li>👫 <b>Adam & Eve</b> – first humans</li>
+<li>🌳 Forbidden: <b>Tree of Knowledge</b> – test of obedience</li>
+<li>🐍 Sin entered through <b>serpent deception</b> – beginning of human sin</li>
+</ul>
+<div class="key"><b>🔑 Key Points:</b> Creation → Fall → Sin → Separation</div>
+<div class="quiz">Q: Who tempted Eve?<br>A: 🐍 Serpent</div>
+</div>
+
+<button class="accordion topic">🌧️ Flood & Babel</button>
+<div class="panel">
+<ul>
+<li>🚢 <b>Noah</b> built the ark – saved from God’s judgment</li>
+<li>🌧️ Rain: <b>40 days</b> – worldwide flood</li>
+<li>🌈 Sign of covenant: <b>Rainbow</b> – God’s promise</li>
+<li>🏗️ <b>Babel</b>: languages confused – stopped human pride</li>
+</ul>
+<div class="key">🧠 Mnemonic: <b>F.R.A.M.E</b> → Flood, Rain, Ark, Many languages, Earth repopulated</div>
+<div class="quiz">Q: What bird did Noah send first?<br>A: 🐦 Raven</div>
+</div>
+</div>
+
+<!-- PATRIARCHS -->
+<button class="accordion sub">👴 Patriarchs</button>
+<div class="panel">
+<button class="accordion topic">📜 Abraham to Joseph</button>
+<div class="panel">
+<ul>
+<li>⭐ <b>Abraham</b> – father of faith, trusted God</li>
+<li>👶 Son promised: <b>Isaac</b> – fulfillment of God’s promise</li>
+<li>🔁 <b>Jacob → Israel</b> – renamed by God</li>
+<li>👥 12 Tribes formed – nation of Israel begins</li>
+<li>👑 <b>Joseph</b> – dreams, slavery, became ruler in Egypt</li>
+</ul>
+<div class="key">🔄 Pattern: Promise → Testing → Fulfillment</div>
+<div class="quiz">Q: Who sold Joseph?<br>A: 👥 His brothers</div>
+</div>
+</div>
+
+<!-- EXODUS -->
+<button class="accordion sub">🔥 Exodus & Law</button>
+<div class="panel">
+<button class="accordion topic">🧭 Moses & Deliverance</button>
+<div class="panel">
+<ul>
+<li>👨‍🦯 <b>Moses</b> led Israel – chosen leader</li>
+<li>⚡ 10 Plagues – God judged Egypt</li>
+<li>🌊 Crossed <b>Red Sea</b> – miracle escape</li>
+<li>🍞 Manna provided – daily food from God</li>
+<li>💧 Water from rock – God’s provision</li>
+</ul>
+<div class="key">🧠 Mnemonic: <b>P.R.O.M.I.S.E</b> (Plagues, Red Sea, Obedience, Manna, Instructions, Sinai, Escape)</div>
+<div class="quiz">Q: Where were commandments given?<br>A: ⛰️ Mount Sinai</div>
+</div>
+</div>
+
+<!-- KINGS -->
+<button class="accordion sub">👑 Kings & Prophets</button>
+<div class="panel">
+
+<button class="accordion topic">👑 Kings</button>
+<div class="panel">
+<ul>
+<li>👑 First king: <b>Saul</b> – beginning of monarchy</li>
+<li>🪨 <b>David</b> defeated Goliath – faith in God</li>
+<li>🧠 <b>Solomon</b> – wisdom & temple builder</li>
+<li>⚔️ Kingdom divided after Solomon – Israel split</li>
+</ul>
+<div class="quiz">Q: What did Solomon ask?<br>A: 🧠 Wisdom</div>
+</div>
+
+<button class="accordion topic">📢 Prophets</button>
+<div class="panel">
+<ul>
+<li>🔥 <b>Elijah</b> vs Baal – proved true God</li>
+<li>✨ <b>Elisha</b> miracles – continued Elijah’s work</li>
+<li>🦁 <b>Daniel</b> – lions’ den (faithfulness)</li>
+<li>🐟 <b>Jonah</b> – sent to Nineveh (repentance)</li>
+</ul>
+<div class="key">📚 Major Prophets: Isaiah, Jeremiah, Ezekiel, Daniel</div>
+<div class="quiz">Q: Who was swallowed by fish?<br>A: 🐟 Jonah</div>
+</div>
+</div>
+
+<!-- REVIEW NOTES -->
+<button class="accordion sub">🧾 Reviewer Notes</button>
+<div class="panel">
+<ul>
+<li>➡️ Creation → Fall → Flood → Patriarchs → Exodus → Kings → Prophets</li>
+<li>🎯 Focus: God’s covenant, law, and chosen people Israel</li>
+</ul>
+<div class="key"><b>🧠 Mnemonic:</b> C-F-F-P-E-K-P</div>
+</div>
+
+<!-- ALL QUESTIONS -->
+<button class="accordion sub">❓ All Questions with Answers</button>
+<div class="panel">
+
+<div class="qa">🌍 <b>Q:</b> Who created the heavens and the earth?<br><b>A:</b> God (Creator of all)</div>
+<div class="qa">👤 <b>Q:</b> On which day did God create humans?<br><b>A:</b> Sixth day (final creation)</div>
+<div class="qa">👫 <b>Q:</b> First man and woman?<br><b>A:</b> Adam and Eve</div>
+<div class="qa">🌳 <b>Q:</b> Forbidden tree?<br><b>A:</b> Tree of Knowledge</div>
+<div class="qa">🐍 <b>Q:</b> Who tempted Eve?<br><b>A:</b> Serpent</div>
+
+<div class="qa">⚔️ <b>Q:</b> Who killed Abel?<br><b>A:</b> Cain</div>
+<div class="qa">🛡️ <b>Q:</b> Mark of Cain?<br><b>A:</b> Protection</div>
+<div class="qa">📏 <b>Q:</b> Oldest man?<br><b>A:</b> Methuselah</div>
+<div class="qa">🚢 <b>Q:</b> Who built ark?<br><b>A:</b> Noah</div>
+<div class="qa">🌧️ <b>Q:</b> Rain days?<br><b>A:</b> 40 days</div>
+
+<div class="qa">🐦 <b>Q:</b> First bird sent?<br><b>A:</b> Raven</div>
+<div class="qa">🌈 <b>Q:</b> Sign after flood?<br><b>A:</b> Rainbow</div>
+<div class="qa">🏗️ <b>Q:</b> Babel purpose?<br><b>A:</b> Reach heaven</div>
+<div class="qa">🗣️ <b>Q:</b> Languages?<br><b>A:</b> Confused</div>
+
+<div class="qa">👴 <b>Q:</b> Abram new name?<br><b>A:</b> Abraham</div>
+<div class="qa">👵 <b>Q:</b> Sarai new name?<br><b>A:</b> Sarah</div>
+<div class="qa">👶 <b>Q:</b> Promised son?<br><b>A:</b> Isaac</div>
+
+<div class="qa">🔥 <b>Q:</b> Who led Israel out?<br><b>A:</b> Moses</div>
+<div class="qa">🌊 <b>Q:</b> Sea crossed?<br><b>A:</b> Red Sea</div>
+<div class="qa">📜 <b>Q:</b> Commandments given?<br><b>A:</b> Mount Sinai</div>
+
+<div class="qa">👑 <b>Q:</b> First king?<br><b>A:</b> Saul</div>
+<div class="qa">🪨 <b>Q:</b> Goliath defeated by?<br><b>A:</b> David</div>
+<div class="qa">🧠 <b>Q:</b> Solomon asked?<br><b>A:</b> Wisdom</div>
+
+<div class="qa">🦁 <b>Q:</b> Prophet in lion’s den?<br><b>A:</b> Daniel</div>
+<div class="qa">🐟 <b>Q:</b> Prophet swallowed by fish?<br><b>A:</b> Jonah</div>
+
+<div class="qa">📘 <b>Q:</b> Shortest OT book?<br><b>A:</b> Obadiah</div>
+<div class="qa">📖 <b>Q:</b> Longest Psalm?<br><b>A:</b> Psalm 119</div>
+<div class="qa">🕊️ <b>Q:</b> Emmanuel means?<br><b>A:</b> God with us</div>
+<div class="qa">📅 <b>Q:</b> Sabbath day?<br><b>A:</b> Seventh day</div>
+<div class="qa">👑 <b>Q:</b> Messiah means?<br><b>A:</b> Anointed One</div>
+
+</div>
+</div>
+ 
+            
+            
+            <!-- ==================== END OF REVIEWER ==================== -->
+          </section>
+     
+          <button onclick="showQuiz()" class="btn btn-success">🎯 Start Quiz!</button>
+        </div>
+
+        <div id="quizSection" style="display:none;">
+          <h1>📝 Quiz Time! 📝<br>Old Testament!</h1>
+          <p style="font-size: 18px; font-weight: 600; margin: 0 0 20px 0; text-align: center; color: #667eea;">
+            Multiple-Choice Quiz (random items)
+          </p>
+          <form id="quizForm"></form>
+
+          <div class="nav-buttons">
+            <button id="finishBtn" class="btn">🏆 Get Score</button>
+            <button type="button" onclick="refreshQuiz()" class="btn btn-warning">🔄 Restart Quiz</button>
+            <button type="button" onclick="backToReviewer()" class="btn btn-primary">📚 Back to Review</button>
+          </div>
+          <div id="result"></div>
+        </div>
+      </div>
+      <!-- ==================== END: GATED CONTENT WRAPPER (inserted) ==================== -->
+    </div>
+  </div>
+
+  <!-- QUIZ COUNT MODAL -->
+  <div id="quizCountModalBG" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; backdrop-filter:blur(5px);">
+    <div style="background:white; width:90%; max-width:420px; margin:15vh auto; padding:35px; border-radius:25px; box-shadow:0 20px 60px rgba(0,0,0,0.5); text-align:center; font-family:'Bubblegum Sans','Fredoka',cursive;">
+      <div style="font-size:3em; margin-bottom:10px;">📝</div>
+      <h2 style="color:#667eea; font-size:1.6em; margin-bottom:8px;">How many questions?</h2>
+      <p style="color:#4a5568; font-size:1em; margin-bottom:25px; font-family:'Fredoka',cursive;">Choose how many items you want in your quiz!</p>
+
+      <div style="display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:25px;">
+        <button onclick="adjustQuizCount(-5)" style="width:44px; height:44px; border-radius:50%; border:none; background:linear-gradient(135deg,#f093fb,#f5576c); color:white; font-size:1.4em; cursor:pointer; font-weight:bold; line-height:1;">−</button>
+        <input id="quizCountInput" type="number" min="1" max="108" value="10"
+          style="width:90px; text-align:center; font-size:2em; font-weight:bold; border:3px solid #667eea; border-radius:15px; padding:8px; font-family:'Fredoka',cursive; color:#2d3748;">
+        <button onclick="adjustQuizCount(5)" style="width:44px; height:44px; border-radius:50%; border:none; background:linear-gradient(135deg,#84fab0,#8fd3f4); color:white; font-size:1.4em; cursor:pointer; font-weight:bold; line-height:1;">+</button>
+      </div>
+
+      <p id="quizCountHint" style="color:#718096; font-size:0.9em; margin-bottom:20px; font-family:'Fredoka',cursive;"></p>
+
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button onclick="startQuizWithCount()" class="btn btn-success" style="font-size:1.1em; padding:14px 30px;">🎯 Let's Go!</button>
+        <button onclick="closeQuizCountModal()" class="btn" style="font-size:1.1em; padding:14px 30px; background:#718096;">✖ Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT POPUP MODAL -->
+  <div id="contactModalBG">
+    <div id="contactModal">
+      <h2>📬 Contact Form</h2>
+      <p style="text-align: center; margin-bottom: 20px; color: #4a5568;">
+        Fill in your details and we'll contact you soon!
+      </p>
+
+      <label>👤 Name:</label>
+      <input id="c_name" type="text">
+
+      <label>📱 Contact No.:</label>
+      <input id="c_contact" type="text">
+
+      <label>💬 Social Media Account:</label>
+      <input id="c_social" type="text">
+
+      <label>✉️ Request / Comment:</label>
+      <textarea id="c_request"></textarea>
+
+      <button id="c_submit" class="btn btn-success" style="width: 100%;">Send Message</button>
+      <button id="c_close" class="btn" style="width: 100%; background: #718096;">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // ==================== GOOGLE APPS SCRIPT CONFIGURATION ====================
+    // IMPORTANT: Replace this URL with your deployed Google Apps Script web app URL
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDvvheKuMWsJiQ0hKdQt8V3WX6gyoMwngNQvis3JJS24I8StyiT7U8L2alwiOtJKb7/exec";
+    // After deploying the Apps Script, paste the web app URL above
+
+    // ==================== HELPER FUNCTIONS ====================
+    document.addEventListener("DOMContentLoaded", () => {
+      /* LOGIN JS DEACTIVATED (keep for future use)
+      // ===== SHOW / HIDE PASSWORD TOGGLE =====
+      const toggleEye = document.getElementById("toggleEye");
+      const codeInputEye = document.getElementById("codeInput");
+
+      toggleEye.addEventListener("click", () => {
+        if (codeInputEye.type === "password") {
+          codeInputEye.type = "text";
+          toggleEye.textContent = "🙈";
+        } else {
+          codeInputEye.type = "password";
+          toggleEye.textContent = "👁️";
+        }
+      });
+
+      // ===== Display filename on login page =====
+      const quizTitleEl = document.querySelector("#quizSection h1");
+      const displayFileName = quizTitleEl ? quizTitleEl.textContent.replace("Quiz Time! 📝", "").replace("📝", "").trim() : "Science Grade 6";
+      const fileDisplay = document.getElementById("fileDisplay");
+      if (fileDisplay) fileDisplay.textContent = displayFileName;
+
+      // ===== ELEMENTS =====
+      const accessSection = document.getElementById("accessSection");
+      const mainContent = document.getElementById("mainContent");
+      const codeInput = document.getElementById("codeInput");
+      const accessSubmit = document.getElementById("accessSubmit");
+      const message = document.getElementById("message");
+      const tipsArea = document.getElementById("tipsArea");
+      END LOGIN JS */
+
+      // ===============================
+      // CONTACT MODAL LOGIC
+      // ===============================
+      const contactLink = document.getElementById("contactLink");
+      const contactBG = document.getElementById("contactModalBG");
+      const contactClose = document.getElementById("c_close");
+      const contactSubmit = document.getElementById("c_submit");
+
+      if (contactLink && contactBG) {
+        contactLink.addEventListener("click", () => {
+          contactBG.style.display = "block";
+        });
+      }
+
+      if (contactClose && contactBG) {
+        contactClose.addEventListener("click", () => {
+          contactBG.style.display = "none";
+        });
+      }
+
+      // ===============================
+      // CONTACT SUBMISSION LOGIC
+      // ===============================
+      if (contactSubmit) {
+        contactSubmit.addEventListener("click", async () => {
+          const name = document.getElementById("c_name").value.trim();
+          const contact = document.getElementById("c_contact").value.trim();
+          const social = document.getElementById("c_social").value.trim();
+          const request = document.getElementById("c_request").value.trim();
+
+          if (!name || !contact || !request) {
+            alert("Please fill out name, contact, and request/comment.");
+            return;
+          }
+
+          const quizTitleElLocal = document.querySelector("#quizSection h1");
+          const fileName = quizTitleElLocal
+            ? quizTitleElLocal.textContent.replace("Quiz Time! 📝", "").replace("📝", "").trim()
+            : "Science Grade 6";
+
+          const deviceInfo = await getDeviceInfo();
+
+          try {
+            contactSubmit.disabled = true;
+            contactSubmit.innerHTML = '<span class="loading"></span> Sending...';
+
+            await fetch(GOOGLE_SCRIPT_URL, {
+              method: "POST",
+              redirect: 'follow',
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: JSON.stringify({
+                action: "saveContact",
+                data: {
+                  event: "Client Request",
+                  request,
+                  name,
+                  contact,
+                  social,
+                  filename: fileName,
+                  timestamp: new Date().toLocaleString(),
+                  device: deviceInfo
+                }
+              })
+            });
+
+            alert("✅ Message sent successfully!");
+            contactBG.style.display = "none";
+            
+            // Clear form
+            document.getElementById("c_name").value = "";
+            document.getElementById("c_contact").value = "";
+            document.getElementById("c_social").value = "";
+            document.getElementById("c_request").value = "";
+
+          } catch (err) {
+            alert("❌ Error sending message. Please try again.");
+            console.error(err);
+          } finally {
+            contactSubmit.disabled = false;
+            contactSubmit.textContent = "Send Message";
+          }
+        });
+      }
+
+      // ===== DEVICE INFO HELPER =====
+      async function getDeviceInfo() {
+        const uaData = navigator.userAgentData || {};
+        const ua = navigator.userAgent;
+        const platform = navigator.platform;
+        const language = navigator.language;
+        const screenResolution = `${window.screen.width}x${window.screen.height}`;
+        const browserVersion = uaData.brands
+          ? uaData.brands.map(b => `${b.brand} ${b.version}`).join(", ")
+          : ua;
+
+        const uaLower = ua.toLowerCase();
+        let deviceType = "desktop";
+        if (/mobi|iphone|android/i.test(uaLower)) {
+          deviceType = "mobile";
+        } else if (/tablet|ipad|nexus 7|nexus 10/i.test(uaLower)) {
+          deviceType = "tablet";
+        }
+
+        let networkInfo = "Unavailable";
+        try {
+          const res = await fetch("https://ipapi.co/json/");
+          if (res.ok) {
+            const info = await res.json();
+            networkInfo = {
+              ip: info.ip,
+              city: info.city,
+              region: info.region,
+              country: info.country_name,
+              org: info.org
+            };
+          }
+        } catch {
+          networkInfo = "Network lookup failed";
+        }
+
+        return {
+          ua,
+          browserVersion,
+          platform,
+          language,
+          screenResolution,
+          deviceType,
+          networkInfo
+        };
+      }
+
+      // ===== SAVE LOGIN TO GOOGLE SHEETS =====
+      async function saveLoginToGoogleSheets(codeUsed) {
+        try {
+          console.log('=== SAVING LOGIN DATA ===');
+          console.log('Access Code:', codeUsed);
+          
+          const quizTitleElLocal = document.querySelector("#quizSection h1");
+          const fileName = quizTitleElLocal 
+            ? quizTitleElLocal.textContent.replace("Quiz Time! 📝", "").replace("📝", "").trim() 
+            : "Science Grade 6";
+
+          const deviceInfo = await getDeviceInfo();
+          
+          const payload = {
+            action: "saveLogin",
+            data: {
+              event: "Login Access",
+              studentName: "",
+              accessCode: codeUsed,
+              filename: fileName,
+              timestamp: new Date().toLocaleString(),
+              device: deviceInfo
+            }
+          };
+          
+          console.log('Payload to send:', JSON.stringify(payload, null, 2));
+
+          const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            redirect: 'follow',
+            headers: { 
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: JSON.stringify(payload)
+          });
+
+          console.log(`✅ Login logged successfully (file: ${fileName}).`);
+          const responseData = await response.json();
+          console.log('Server response:', responseData);
+        } catch (err) {
+          console.error("❌ Error logging to Google Sheets:", err);
+          // Don't show error to user - logging is not critical
+        }
+      }
+
+      // ===== LOAD TIPS FROM GOOGLE SHEETS =====
+      async function loadTips() {
+        try {
+          // First check if URL is configured
+          if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+            tipsArea.innerHTML = 
+              "⚠️ <strong>Configuration Required:</strong><br>" +
+              "Please set up your Google Apps Script URL in the HTML file.<br>" +
+              "See SETUP_GUIDE.md for instructions.";
+            return;
+          }
+
+          const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=getTips`, {
+            method: 'GET',
+            redirect: 'follow'
+          });
+          
+          if (!resp.ok) {
+            throw new Error(`HTTP error! status: ${resp.status}`);
+          }
+          
+          const data = await resp.json();
+          
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          
+          const tipsText = data.tips || 
+            "💡 <strong>Tips:</strong><br>" +
+            "✅ Press Enter after typing the code.<br>" +
+            "✅ Stay online when entering.<br>" +
+            "✅ For help, contact: @Rekz Banz";
+          
+          tipsArea.innerHTML = tipsText;
+        } catch (err) {
+          console.error("Tips fetch error:", err);
+          tipsArea.innerHTML = 
+            "⚠️ <strong>Connection Error:</strong><br>" +
+            "Could not connect to Google Sheets.<br>" +
+            `Error: ${err.message}<br>` +
+            "Please check:<br>" +
+            "1. Google Script URL is correct<br>" +
+            "2. Script is deployed as Web App<br>" +
+            "3. Access is set to 'Anyone'";
+        }
+      }
+      /* LOGIN JS DEACTIVATED - loadTips call (keep for future use)
+      loadTips();
+      END LOGIN JS */
+
+      // ===== SAVE QUIZ SCORE TO GOOGLE SHEETS =====
+      async function saveScoreToGoogleSheets(score, total) {
+        try {
+          console.log('=== SAVING SCORE DATA ===');
+          console.log('Score:', score, '/', total);
+          
+          const quizTitleElLocal = document.querySelector("#quizSection h1");
+          const fileName = quizTitleElLocal 
+            ? quizTitleElLocal.textContent.replace("Quiz Time! 📝", "").replace("📝", "").trim() 
+            : "Science Grade 6";
+
+          const deviceInfo = await getDeviceInfo();
+          
+          const payload = {
+            action: "saveScore",
+            data: {
+              event: "Quiz Score",
+              studentName: "",
+              score: `${score}/${total}`,
+              filename: fileName,
+              timestamp: new Date().toLocaleString(),
+              device: deviceInfo
+            }
+          };
+          
+          console.log('Payload to send:', JSON.stringify(payload, null, 2));
+
+          const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            redirect: 'follow',
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: JSON.stringify(payload)
+          });
+
+          console.log("✅ Quiz score saved to Google Sheets successfully.");
+          const responseData = await response.json();
+          console.log('Server response:', responseData);
+        } catch (err) {
+          console.error("❌ Error saving quiz score:", err);
+          // Don't show error to user - logging is not critical
+        }
+      }
+
+      /* LOGIN JS DEACTIVATED - localStorage & login handler (keep for future use)
+      // ===== LOCAL STORAGE =====
+      const fileName = window.location.pathname.split("/").pop() || "default";
+      const storageKey = "savedAccessCode_" + fileName.replace(/\W+/g, "_");
+      const savedCode = localStorage.getItem(storageKey);
+      if (savedCode) codeInput.value = savedCode;
+      codeInput.addEventListener("input", () =>
+        localStorage.setItem(storageKey, codeInput.value)
+      );
+
+      // ===== LOGIN HANDLER =====
+      codeInput.addEventListener("keyup", (e) => {
+        if (e.key === "Enter") accessSubmit.click();
+      });
+
+      accessSubmit.addEventListener("click", async () => {
+        const input = codeInput.value.trim();
+        
+        if (!input) {
+          message.textContent = "⚠️ Please enter the access code.";
+          return;
+        }
+
+        // Check if URL is configured
+        if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+          message.innerHTML = "⚠️ <strong>Setup Required:</strong><br>Google Apps Script URL not configured. See SETUP_GUIDE.md";
+          return;
+        }
+
+        accessSubmit.disabled = true;
+        codeInput.disabled = true;
+        message.innerHTML = '<span class="loading"></span> Checking...';
+
+        try {
+          console.log('Fetching access code from:', GOOGLE_SCRIPT_URL);
+          
+          const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAccessCode`, {
+            method: 'GET',
+            redirect: 'follow'
+          });
+  
+          console.log('Response status:', resp.status);
+          
+          if (!resp.ok) {
+            throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
+          }
+          
+          const data = await resp.json();
+          console.log('Response data:', data);
+
+          if (data.error) {
+            throw new Error(data.error);
+          }
+
+          const remoteCode = data.accessCode;
+
+          if (!remoteCode) {
+            message.innerHTML = "❌ Access code not found in Google Sheets.<br>Please check the AccessCode sheet.";
+            throw new Error("No accessCode in response");
+          }
+
+          if (input === String(remoteCode).trim()) {
+            accessSection.style.display = "none";
+            mainContent.style.display = "block";
+            message.textContent = "";
+            saveLoginToGoogleSheets(input);
+            setTimeout(() => {
+              const btn = document.querySelector("#mainContent button");
+              if (btn) btn.focus();
+            }, 100);
+          } else {
+            message.innerHTML = `❌ Wrong code. Entered: "${input}"<br>Please contact support.`;
+            localStorage.removeItem(storageKey);
+            accessSubmit.disabled = false;
+            codeInput.disabled = false;
+          }
+        } catch (err) {
+          console.error("Access fetch error:", err);
+          message.innerHTML = 
+            `❌ <strong>Connection Error:</strong><br>` +
+            `${err.message}<br>` +
+            `Please verify:<br>` +
+            `1. Google Script URL is correct<br>` +
+            `2. Script is deployed as Web App<br>` +
+            `3. Access permission is 'Anyone'`;
+          accessSubmit.disabled = false;
+          codeInput.disabled = false;
+        }
+      });
+      END LOGIN JS */
+
+      // ===== QUIZ LOGIC =====
+      const pool = [
+      
+      
+ <!-- ==================== START OF QUIZ ==================== -->
+
+{q: "Who created the heavens and the earth?", choices: ["Moses","Abraham","God","David","Elijah","Noah"], correctIndex: 2},
+{q: "On which day did God create humans?", choices: ["First","Second","Third","Fourth","Fifth","Sixth"], correctIndex: 5},
+{q: "What were the names of the first man and woman?", choices: ["Cain and Abel","Adam and Eve","Noah and Sarah","Isaac and Rebekah","Jacob and Rachel","David and Bathsheba"], correctIndex: 1},
+{q: "What tree were Adam and Eve forbidden to eat from?", choices: ["Tree of Life","Tree of Knowledge of Good and Evil","Olive Tree","Fig Tree","Palm Tree","Cedar Tree"], correctIndex: 1},
+{q: "Who tempted Eve in the Garden?", choices: ["Angel","Lion","Serpent","Adam","God","Demon"], correctIndex: 2},
+{q: "Who killed Abel?", choices: ["Adam","Seth","Cain","Noah","Enoch","Lamech"], correctIndex: 2},
+{q: "What was the mark God placed on Cain for?", choices: ["Punishment","Protection","Curse","Healing","Identity","Blessing"], correctIndex: 1},
+{q: "Who was the oldest man recorded in the Bible?", choices: ["Noah","Methuselah","Abraham","Adam","Enoch","Isaac"], correctIndex: 1},
+{q: "Who built the ark?", choices: ["Moses","Noah","Abraham","David","Solomon","Joshua"], correctIndex: 1},
+{q: "How many days did it rain during the flood?", choices: ["10","20","30","40","50","60"], correctIndex: 3},
+
+{q: "What bird did Noah first send out?", choices: ["Dove","Eagle","Raven","Sparrow","Falcon","Crow"], correctIndex: 2},
+{q: "What sign did God give as a covenant after the flood?", choices: ["Star","Cloud","Rainbow","Fire","Wind","Stone"], correctIndex: 2},
+{q: "Who was Noah’s father?", choices: ["Lamech","Enoch","Methuselah","Adam","Seth","Jared"], correctIndex: 0},
+{q: "What was the Tower of Babel built for?", choices: ["Temple","Kingdom","To reach heaven","Defense","Market","City wall"], correctIndex: 2},
+{q: "What happened to languages at Babel?", choices: ["Unified","Destroyed","Confused","Translated","Copied","Forgotten"], correctIndex: 2},
+{q: "What was Abram’s new name?", choices: ["Isaac","Jacob","Abraham","Moses","Aaron","Joseph"], correctIndex: 2},
+{q: "What was Sarai’s new name?", choices: ["Rachel","Leah","Sarah","Rebekah","Miriam","Hannah"], correctIndex: 2},
+{q: "What son was promised to Abraham?", choices: ["Ishmael","Isaac","Jacob","Esau","Joseph","Benjamin"], correctIndex: 1},
+{q: "Who was Isaac’s wife?", choices: ["Rachel","Leah","Rebekah","Sarah","Hannah","Miriam"], correctIndex: 2},
+{q: "What were Isaac’s twin sons?", choices: ["Cain and Abel","Jacob and Esau","Joseph and Benjamin","Moses and Aaron","David and Solomon","Peter and Andrew"], correctIndex: 1},
+{q: "Who sold his birthright for stew?", choices: ["Jacob","Esau","Joseph","Judah","Benjamin","Reuben"], correctIndex: 1},
+{q: "Who stole Esau’s blessing?", choices: ["Isaac","Jacob","Joseph","Laban","Reuben","Judah"], correctIndex: 1},
+{q: "What was Jacob’s name changed to?", choices: ["Judah","Israel","Edom","Dan","Levi","Gad"], correctIndex: 1},
+{q: "How many tribes of Israel are there?", choices: ["10","11","12","13","14","15"], correctIndex: 2},
+{q: "Who was Joseph’s father?", choices: ["Isaac","Jacob","Abraham","Esau","Judah","Reuben"], correctIndex: 1},
+{q: "What coat did Joseph receive?", choices: ["White robe","Royal cloak","Coat of many colors","Armor","Garment","Tunic"], correctIndex: 2},
+{q: "What did Joseph’s dreams symbolize?", choices: ["Wealth","Power","Family bowing","War","Famine","Kingship"], correctIndex: 2},
+{q: "Who sold Joseph into slavery?", choices: ["Egyptians","His brothers","Pharaoh","Romans","Philistines","Midianites"], correctIndex: 1},
+{q: "Where was Joseph taken?", choices: ["Canaan","Babylon","Egypt","Assyria","Rome","Jericho"], correctIndex: 2},
+{q: "Who became Pharaoh’s right-hand man?", choices: ["Moses","Joseph","Aaron","Daniel","David","Solomon"], correctIndex: 1},
+
+{q: "Who led Israel out of Egypt?", choices: ["Aaron","Joshua","Moses","David","Samuel","Solomon"], correctIndex: 2},
+{q: "Who was Moses’ brother?", choices: ["Aaron","Joshua","Caleb","Samuel","David","Elijah"], correctIndex: 0},
+{q: "What bush did Moses see burning?", choices: ["Green bush","Burning bush","Dry bush","Olive bush","Palm bush","Fig bush"], correctIndex: 1},
+{q: "What river was Moses found in?", choices: ["Jordan","Euphrates","Nile","Tigris","Red Sea","Galilee"], correctIndex: 2},
+{q: "How many plagues struck Egypt?", choices: ["5","7","8","9","10","12"], correctIndex: 4},
+{q: "What was the last plague?", choices: ["Frogs","Darkness","Death of firstborn","Boils","Hail","Locusts"], correctIndex: 2},
+{q: "What sea did Israel cross?", choices: ["Dead Sea","Red Sea","Mediterranean","Jordan","Galilee","Black Sea"], correctIndex: 1},
+{q: "What did God provide as food in the desert?", choices: ["Bread","Manna","Fish","Fruit","Meat","Honey"], correctIndex: 1},
+{q: "What water miracle did Moses perform?", choices: ["Turned water to wine","Split river","Water from rock","Flood","Rain","Spring"], correctIndex: 2},
+{q: "Where were the Ten Commandments given?", choices: ["Mount Zion","Mount Sinai","Mount Carmel","Mount Nebo","Mount Horeb","Mount Ararat"], correctIndex: 1},
+
+{q: "How many commandments are there?", choices: ["8","9","10","11","12","13"], correctIndex: 2},
+{q: "What idol did Israel worship?", choices: ["Golden calf","Stone idol","Tree","Snake","Lion","Statue"], correctIndex: 0},
+{q: "Who made the golden calf?", choices: ["Moses","Joshua","Aaron","David","Samuel","Elijah"], correctIndex: 2},
+{q: "What tabernacle item held the commandments?", choices: ["Ark of the Covenant","Altar","Lampstand","Table","Curtain","Chest"], correctIndex: 0},
+{q: "Who was Moses’ successor?", choices: ["Caleb","Joshua","Aaron","Samuel","David","Elijah"], correctIndex: 1},
+
+{q: "What city’s walls fell with trumpets?", choices: ["Jerusalem","Jericho","Bethel","Ai","Hebron","Gaza"], correctIndex: 1},
+{q: "Who led the conquest of Canaan?", choices: ["Moses","Joshua","Caleb","Aaron","Samuel","David"], correctIndex: 1},
+{q: "Who was the strong judge with long hair?", choices: ["Gideon","Samson","Jephthah","Othniel","Ehud","Deborah"], correctIndex: 1},
+{q: "What weakened Samson?", choices: ["Poison","Hair cut","Sword","Fire","Water","Chains"], correctIndex: 1},
+{q: "Who was the prophetess judge?", choices: ["Deborah","Ruth","Esther","Hannah","Miriam","Sarah"], correctIndex: 0},
+
+{q: "Who defeated Midian with 300 men?", choices: ["Joshua","Gideon","David","Saul","Samuel","Elijah"], correctIndex: 1},
+{q: "Who was Ruth’s mother-in-law?", choices: ["Naomi","Sarah","Leah","Rachel","Miriam","Hannah"], correctIndex: 0},
+{q: "What was Boaz to Ruth?", choices: ["Brother","Husband","Cousin","Redeemer","Friend","Servant"], correctIndex: 3},
+{q: "Who was the last judge of Israel?", choices: ["Samuel","David","Saul","Gideon","Samson","Joshua"], correctIndex: 0},
+{q: "What did Hannah pray for?", choices: ["Wealth","Child","Land","Peace","Power","Food"], correctIndex: 1},
+
+{q: "Who was Israel’s first king?", choices: ["David","Solomon","Saul","Samuel","Hezekiah","Josiah"], correctIndex: 2},
+{q: "Who anointed Saul?", choices: ["Samuel","David","Nathan","Elijah","Moses","Aaron"], correctIndex: 0},
+{q: "Who defeated Goliath?", choices: ["Saul","David","Jonathan","Samuel","Abner","Joab"], correctIndex: 1},
+{q: "What weapon did David use?", choices: ["Sword","Spear","Sling","Bow","Knife","Stone"], correctIndex: 2},
+{q: "Who was David’s best friend?", choices: ["Jonathan","Saul","Samuel","Abner","Joab","Solomon"], correctIndex: 0},
+
+{q: "Who succeeded David?", choices: ["Saul","Solomon","Rehoboam","Hezekiah","Josiah","Absalom"], correctIndex: 1},
+{q: "What did Solomon ask from God?", choices: ["Wealth","Power","Wisdom","Army","Gold","Fame"], correctIndex: 2},
+{q: "What temple did Solomon build?", choices: ["Temple in Jerusalem","Tabernacle","Synagogue","Altar","Palace","Tower"], correctIndex: 0},
+{q: "What queen visited Solomon?", choices: ["Queen of Sheba","Queen Esther","Queen Vashti","Queen Jezebel","Queen Deborah","Queen Miriam"], correctIndex: 0},
+{q: "What happened to the kingdom after Solomon?", choices: ["United","Divided","Destroyed","Expanded","Moved","Strengthened"], correctIndex: 1},
+
+{q: "Who was the wicked queen of Israel?", choices: ["Jezebel","Esther","Deborah","Ruth","Leah","Rachel"], correctIndex: 0},
+{q: "Who challenged prophets of Baal?", choices: ["Elijah","Elisha","Isaiah","Jeremiah","Ezekiel","Daniel"], correctIndex: 0},
+{q: "What prophet was taken up in a whirlwind?", choices: ["Elijah","Moses","Elisha","Isaiah","Jeremiah","Daniel"], correctIndex: 0},
+{q: "Who succeeded Elijah?", choices: ["Elisha","Isaiah","Jeremiah","Ezekiel","Hosea","Joel"], correctIndex: 0},
+{q: "What miracle did Elisha perform with oil?", choices: ["Multiplied oil","Turned oil to water","Burned oil","Stored oil","Sold oil","Poured oil"], correctIndex: 0},
+
+{q: "Who interpreted dreams in Babylon?", choices: ["Daniel","Joseph","Moses","Aaron","David","Solomon"], correctIndex: 0},
+{q: "Who survived the lion’s den?", choices: ["Daniel","Joseph","David","Moses","Samuel","Isaiah"], correctIndex: 0},
+{q: "Who were thrown into the fiery furnace?", choices: ["Shadrach Meshach Abednego","Peter John James","Paul Silas Timothy","Moses Aaron Joshua","David Saul Jonathan","Isaiah Jeremiah Ezekiel"], correctIndex: 0},
+{q: "What empire destroyed Jerusalem?", choices: ["Rome","Babylon","Egypt","Assyria","Persia","Greece"], correctIndex: 1},
+{q: "Who rebuilt the walls of Jerusalem?", choices: ["Ezra","Nehemiah","Zerubbabel","Joshua","Daniel","David"], correctIndex: 1},
+
+{q: "Who rebuilt the temple?", choices: ["Zerubbabel","Nehemiah","Ezra","Joshua","David","Solomon"], correctIndex: 0},
+{q: "What queen saved the Jews?", choices: ["Esther","Ruth","Deborah","Leah","Rachel","Miriam"], correctIndex: 0},
+{q: "What prophet was swallowed by a fish?", choices: ["Jonah","Daniel","Elijah","Moses","David","Isaiah"], correctIndex: 0},
+{q: "What city did Jonah preach to?", choices: ["Nineveh","Jerusalem","Babylon","Egypt","Samaria","Jericho"], correctIndex: 0},
+{q: "What book contains wisdom sayings?", choices: ["Proverbs","Psalms","Job","Ecclesiastes","Song of Songs","Isaiah"], correctIndex: 0},
+
+{q: "What book tells Job’s story?", choices: ["Job","Genesis","Exodus","Psalms","Proverbs","Isaiah"], correctIndex: 0},
+{q: "Who was known as the weeping prophet?", choices: ["Jeremiah","Isaiah","Ezekiel","Daniel","Hosea","Joel"], correctIndex: 0},
+{q: "What prophet foretold the suffering servant?", choices: ["Isaiah","Jeremiah","Ezekiel","Daniel","Hosea","Amos"], correctIndex: 0},
+{q: "Who saw visions of wheels and creatures?", choices: ["Ezekiel","Isaiah","Jeremiah","Daniel","Hosea","Joel"], correctIndex: 0},
+{q: "What book contains the Ten Commandments?", choices: ["Exodus","Genesis","Leviticus","Numbers","Deuteronomy","Joshua"], correctIndex: 0},
+
+{q: "What book repeats the law?", choices: ["Deuteronomy","Leviticus","Numbers","Exodus","Genesis","Joshua"], correctIndex: 0},
+{q: "What is the shortest OT book?", choices: ["Obadiah","Joel","Amos","Jonah","Micah","Nahum"], correctIndex: 0},
+{q: "What Psalm is the longest?", choices: ["Psalm 119","Psalm 23","Psalm 1","Psalm 150","Psalm 91","Psalm 100"], correctIndex: 0},
+{q: "What does 'Emmanuel' mean?", choices: ["God with us","God saves","God reigns","God speaks","God heals","God provides"], correctIndex: 0},
+{q: "What is the Shema?", choices: ["Hear O Israel","Prayer","Law","Command","Song","Blessing"], correctIndex: 0},
+
+{q: "What day is the Sabbath?", choices: ["Seventh day","First day","Second day","Third day","Fourth day","Fifth day"], correctIndex: 0},
+{q: "What animal was sacrificed for sin?", choices: ["Lamb","Goat","Bull","Dove","Ram","All of these"], correctIndex: 5},
+{q: "What is circumcision a sign of?", choices: ["Covenant","Faith","Law","Promise","Obedience","Identity"], correctIndex: 0},
+{q: "What mountain did Abraham offer Isaac on?", choices: ["Moriah","Sinai","Carmel","Nebo","Zion","Ararat"], correctIndex: 0},
+{q: "What city was destroyed with Sodom?", choices: ["Gomorrah","Jericho","Nineveh","Babylon","Samaria","Hebron"], correctIndex: 0},
+
+        
+        
+<!-- ==================== END OF QUIZ ==================== -->
+      ];
+
+      // === UPDATE QUIZ TITLE (selected/total items) ===
+      function updateQuizTitleCount(selectedCount) {
+        const quizTitleEl = document.querySelector("#quizSection h1");
+        if (quizTitleEl) {
+          const totalItems = pool.filter(item => item && item.q && item.choices).length;
+          quizTitleEl.innerHTML = `📝 Quiz Time! 📝<br>Old Testament!<br><span style="font-size: 0.7em; color: #667eea;">(${selectedCount}/${totalItems} items)</span>`;
+        }
+      }
+
+      function pickRandom(arr, n) {
+        const copy = [...arr];
+        const result = [];
+        while (result.length < n && copy.length > 0) {
+          const idx = Math.floor(Math.random() * copy.length);
+          result.push(copy.splice(idx, 1)[0]);
+        }
+        return result;
+      }
+
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      function selectRandomChoices(item) {
+        const correctChoice = item.choices[item.correctIndex];
+        let others = item.choices.filter((_, idx) => idx !== item.correctIndex);
+        shuffleArray(others);
+        let selected = [correctChoice, ...others.slice(0, 4)];
+        shuffleArray(selected);
+        item.correctIndex = selected.indexOf(correctChoice);
+        item.choices = selected;
+      }
+
+      let quizItems = [];
+
+      window.showQuiz = function () {
+        // Update hint with total available questions
+        const total = pool.filter(item => item && item.q && item.choices).length;
+        document.getElementById("quizCountHint").textContent = `Max available: ${total} questions`;
+        // Reset input to default
+        const input = document.getElementById("quizCountInput");
+        input.max = total;
+        input.value = Math.min(10, total);
+        document.getElementById("quizCountModalBG").style.display = "block";
+      };
+
+      window.adjustQuizCount = function (delta) {
+        const input = document.getElementById("quizCountInput");
+        const total = pool.filter(item => item && item.q && item.choices).length;
+        let val = parseInt(input.value) + delta;
+        val = Math.max(1, Math.min(total, val));
+        input.value = val;
+      };
+
+      window.closeQuizCountModal = function () {
+        document.getElementById("quizCountModalBG").style.display = "none";
+      };
+
+      window.startQuizWithCount = function () {
+        const input = document.getElementById("quizCountInput");
+        const total = pool.filter(item => item && item.q && item.choices).length;
+        let count = parseInt(input.value);
+        if (isNaN(count) || count < 1) count = 10;
+        if (count > total) count = total;
+        document.getElementById("quizCountModalBG").style.display = "none";
+        document.getElementById("reviewerSection").style.display = "none";
+        document.getElementById("quizSection").style.display = "block";
+        buildQuiz(count);
+        window.scrollTo(0, 0);
+      };
+
+      window.backToReviewer = function () {
+        document.getElementById("quizSection").style.display = "none";
+        document.getElementById("reviewerSection").style.display = "block";
+        document.getElementById("quizForm").innerHTML = "";
+        document.getElementById("result").innerHTML = "";
+        window.scrollTo(0, 0)
+      };
+
+      window.refreshQuiz = function () {
+        document.getElementById("quizForm").innerHTML = "";
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("finishBtn").disabled = false;
+        buildQuiz(quizItems.length || 10);
+        window.scrollTo(0, 0)
+      };
+
+      function buildQuiz(count) {
+        count = count || 10;
+        quizItems = pickRandom(pool, Math.min(count, pool.length));
+        const form = document.getElementById("quizForm");
+        form.innerHTML = "";
+        quizItems.forEach((item, i) => {
+          selectRandomChoices(item);
+          const div = document.createElement("div");
+          div.className = "question";
+          const q = document.createElement("p");
+          q.textContent = `${i + 1}. ${item.q}`;
+          div.appendChild(q);
+          item.choices.forEach((choice, idx) => {
+            const label = document.createElement("label");
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = `q${i}`;
+            radio.value = idx;
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(" " + choice));
+            div.appendChild(label);
+            div.appendChild(document.createElement("br"));
+          });
+          form.appendChild(div);
+        });
+        updateQuizTitleCount(quizItems.length);
+      }
+      
+document.querySelectorAll(".accordion").forEach(btn=>{
+btn.addEventListener("click",function(){
+let panel=this.nextElementSibling;
+panel.style.display=panel.style.display==="block"?"none":"block";
+});
+});
+
+      document.getElementById("finishBtn").addEventListener("click", async function () {
+        let score = 0;
+        const total = quizItems.length;
+        for (let i = 0; i < total; i++) {
+          const radios = document.querySelectorAll(`input[name="q${i}"]`);
+          let selected = -1;
+          radios.forEach(r => { if (r.checked) selected = parseInt(r.value); });
+          const div = document.getElementById("quizForm").children[i];
+          if (selected === quizItems[i].correctIndex) {
+            score++;
+            div.insertAdjacentHTML("beforeend", "<div class='correct'>✔ Correct! Great job!</div>");
+          } else {
+            const correctAnswer = quizItems[i].choices[quizItems[i].correctIndex];
+            div.insertAdjacentHTML("beforeend", `<div class='wrong'>✘ Oops! The answer is: ${correctAnswer}</div>`);
+          }
+          radios.forEach(r => r.disabled = true);
+        }
+        
+        const percentage = Math.round((score / total) * 100);
+        let emoji = "🎉";
+        if (percentage === 100) emoji = "🏆";
+        else if (percentage >= 80) emoji = "⭐";
+        else if (percentage >= 60) emoji = "👍";
+        else emoji = "💪";
+        
+        document.getElementById("result").innerHTML = 
+          `<h2>${emoji} Your Score: ${score} / ${total} ${emoji}</h2>
+           <p style="font-size: 1.5em; margin-top: 10px;">${percentage}% Correct!</p>`;
+        this.disabled = true;
+
+        // Save score to Google Sheets
+        await saveScoreToGoogleSheets(score, total);
+        
+      });
+    });
+  </script>
+
+  <!-- ==================== START: SUBJECT-PAGE ACCESS GATE (inserted) ==================== -->
+  <div id="gateChecking" style="text-align:center;padding:60px 20px;font-family:sans-serif;">
+    <p>Verifying your access…</p>
+  </div>
+
+  <div id="gateDenied" class="hidden" style="max-width:420px;margin:60px auto;text-align:center;font-family:sans-serif;
+       background:#fff;border-radius:16px;padding:32px;box-shadow:0 8px 24px rgba(0,0,0,.15);">
+    <h2 id="gateDeniedTitle">Access Denied</h2>
+    <p id="gateDeniedMsg">You don't have permission to view this reviewer yet.</p>
+    <a href="reviewer.html" style="display:inline-block;background:#7a1f2b;color:#fff;padding:10px 24px;
+       border-radius:8px;text-decoration:none;font-weight:700;">← Back to Reviewer Hub</a>
+  </div>
+
+  <script>
+  (function () {
+    // Must match the API_URL used in reviewer.html / main.html
+    const API_URL = "https://script.google.com/macros/s/AKfycbzTyj-tiIzlGXfzoKQV3i8EfdXe_cDzGeX3KIofXfwmfIXJd2jnDf18XYXP9wI2QDPM/exec";
+
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function showDenied(title, msg) {
+      document.getElementById("gateChecking").classList.add("hidden");
+      document.getElementById("gateDeniedTitle").textContent = title;
+      document.getElementById("gateDeniedMsg").textContent = msg;
+      document.getElementById("gateDenied").classList.remove("hidden");
+    }
+
+    async function checkAccess() {
+      const userId = getParam("userId");
+      const token = getParam("token");
+
+      if (!userId || !token) {
+        showDenied("Not Logged In", "Open this page from the Reviewer Hub after logging in.");
+        return;
+      }
+
+      try {
+        const qs = new URLSearchParams({ action: "checkAccess", userId, token }).toString();
+        const res = await fetch(`${API_URL}?${qs}`);
+        const r = await res.json();
+
+        if (r.status === "ok" && r.accessStatus === "approved") {
+          document.getElementById("gateChecking").classList.add("hidden");
+          const content = document.getElementById("reviewerContent");
+          if (content) content.classList.remove("hidden");
+        } else if (r.accessStatus === "blocked") {
+          showDenied("Access Blocked", "Your account has been blocked. Contact the owner for help.");
+        } else if (r.accessStatus === "pending" || r.accessStatus === "submitted") {
+          showDenied("Not Approved Yet", "Your payment hasn't been approved yet.");
+        } else {
+          showDenied("Session Expired", "Please log in again through the Access Portal.");
+        }
+      } catch (e) {
+        showDenied("Connection Error", "Couldn't verify your access. Check your connection and try again.");
+      }
+    }
+
+    checkAccess();
+  })();
+  </script>
+  <!-- ==================== END: SUBJECT-PAGE ACCESS GATE (inserted) ==================== -->
+</body>
+</html>
